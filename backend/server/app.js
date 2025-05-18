@@ -7,6 +7,7 @@ import { connectDB } from "./config/db.js";
 import { setupEmail } from "./config/email.js";
 import cors from "cors";
 import { fileURLToPath } from "url";
+import { isAuthenticated } from "./middleware/auth.js"; // Import middleware
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -53,9 +54,15 @@ import notificationRoutes from "./routes/notification.js";
 app.use((req, res, next) => {
   req.wss = wss;
   req.transporter = transporter;
+  console.log("Incoming request:", req.method, req.url, req.session); // Debug
   next();
 });
-app.use("/api", authRoutes);
+
+// Áp dụng authRoutes mà không có middleware isAuthenticated
+app.use("/api/auth", authRoutes);
+
+// Áp dụng isAuthenticated cho các route khác
+app.use("/api", isAuthenticated);
 app.use("/api", employeeRoutes);
 app.use("/api", requestRoutes);
 app.use("/api", postRoutes);

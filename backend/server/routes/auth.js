@@ -3,6 +3,7 @@ const router = express.Router();
 import { isAuthenticated } from "../middleware/auth.js";
 
 router.post("/login", async (req, res) => {
+  console.log("Session before login:", req.session); // Debug
   const { email, password } = req.body;
   try {
     const [users] = await req.db.query("SELECT * FROM Users WHERE Email = ?", [
@@ -27,6 +28,7 @@ router.post("/login", async (req, res) => {
       Email: user.Email,
       Role: user.Role,
     };
+    console.log("Session after login:", req.session); // Debug
     console.log("Đăng nhập thành công, session.user:", req.session.user);
     res.json({ message: "Đăng nhập thành công", user: req.session.user });
   } catch (error) {
@@ -45,6 +47,6 @@ router.post("/logout", (req, res) => {
 });
 
 // Áp dụng isAuthenticated cho các route cần xác thực (nếu có)
-// router.use(isAuthenticated); // Chỉ áp dụng cho các route bảo vệ, ví dụ: /forum
+// router.use(isAuthenticated); // Chỉ áp dụng cho các route bảo vệ khác, ví dụ: /forum
 
 export default router;
