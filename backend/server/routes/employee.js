@@ -11,7 +11,9 @@ import { isAuthenticated } from "../middleware/auth.js";
 
 router.use(isAuthenticated);
 
-router.post("/employees", async (req, res) => {
+// Route GET /employees để lấy danh sách nhân viên
+// routes/employee.js
+router.get("/employees", async (req, res) => {
   try {
     const user = req.session.user;
     const empId = user.EmpID;
@@ -32,6 +34,7 @@ router.post("/employees", async (req, res) => {
       [department]
     );
 
+    console.log("Danh sách nhân viên trả về:", employees); // Log dữ liệu
     res.json({ employees });
   } catch (error) {
     console.error("Lỗi khi lấy danh sách nhân viên:", error);
@@ -39,8 +42,8 @@ router.post("/employees", async (req, res) => {
   }
 });
 
-router.get("/employees/:id", getEmployeeById);
 router.post("/employees", addEmployee);
+router.get("/employees/:id", getEmployeeById);
 router.delete("/employees/:id", deleteEmployee);
 router.put("/employees/:id", updateEmployee);
 

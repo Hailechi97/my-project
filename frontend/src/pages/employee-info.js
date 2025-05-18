@@ -83,43 +83,61 @@ document.addEventListener("DOMContentLoaded", () => {
   endDateFilter.addEventListener("change", filterEmployees);
   sortFilter.addEventListener("change", filterEmployees);
 
-  // Load Employees (Mock Function, will use employeeService)
   const loadEmployees = async (tab, filters = {}) => {
-    const employees = await employeeService.getEmployees(filters);
-    employeesTableBody.innerHTML = "";
-    employees.forEach((employee) => {
-      const row = document.createElement("tr");
-      row.classList.add("employee-row");
-      row.setAttribute("data-id", employee.id);
-      row.innerHTML = `
+    try {
+      const employees = await employeeService.getEmployees(filters);
+      console.log("Danh sách nhân viên nhận được:", employees);
+      if (!Array.isArray(employees)) {
+        throw new Error("Dữ liệu nhân viên không hợp lệ");
+      }
+      employeesTableBody.innerHTML = "";
+      if (employees.length === 0) {
+        employeesTableBody.innerHTML =
+          '<tr><td colspan="7">Không có nhân viên nào trong phòng ban</td></tr>';
+        return;
+      }
+      employees.forEach((employee) => {
+        console.log("Hiển thị từng nhân viên:", employee); // Log từng object trước khi hiển thị
+        const row = document.createElement("tr");
+        row.classList.add("employee-row");
+        row.setAttribute("data-id", employee.id);
+        row.innerHTML = `
         <td><input type="checkbox" class="employee-checkbox" /></td>
         <td class="employee-name-cell">
           <div class="employee-avatar">
             <img src="${
-              employee.avatar || "/default-avatar.png"
-            }" alt="Avatar" />
+              employee.avatar || "/avatars/default-avatar.png"
+            }" alt="Avatar" onerror="this.src='/avatars/nva.jpg';" />
           </div>
-          ${employee.name}
+          ${employee.name || "Chưa có tên"}
         </td>
-        <td>${employee.employeeId}</td>
-        <td>${employee.role}</td>
+        <td>${employee.employeeId || "Chưa có mã"}</td>
+        <td>${employee.role || "Chưa có chức vụ"}</td>
         <td class="${
           employee.status === "active" ? "status-active" : "status-inactive"
         }">
-          ${employee.status === "active" ? "Hoạt động" : "Ngưng hoạt động"}
+          ${
+            employee.status === "active"
+              ? "Hoạt động"
+              : "Ngưng hoạt động" || "Chưa xác định"
+          }
         </td>
-        <td>${employee.department}</td>
+        <td>${employee.department || "Chưa có phòng ban"}</td>
         <td><i class="fas fa-ellipsis-v"></i></td>
       `;
-      row.addEventListener("contextmenu", (e) => {
-        e.preventDefault();
-        contextMenu.style.display = "block";
-        contextMenu.style.left = `${e.pageX}px`;
-        contextMenu.style.top = `${e.pageY}px`;
-        selectedEmployeeId = employee.id;
+        row.addEventListener("contextmenu", (e) => {
+          e.preventDefault();
+          contextMenu.style.display = "block";
+          contextMenu.style.left = `${e.pageX}px`;
+          contextMenu.style.top = `${e.pageY}px`;
+          selectedEmployeeId = employee.id;
+        });
+        employeesTableBody.appendChild(row);
       });
-      employeesTableBody.appendChild(row);
-    });
+    } catch (error) {
+      console.error("Lỗi khi tải danh sách nhân viên:", error);
+      employeesTableBody.innerHTML = `<tr><td colspan="7">Lỗi: ${error.message}</td></tr>`;
+    }
   };
 
   // Show Employee Detail
@@ -130,7 +148,7 @@ document.addEventListener("DOMContentLoaded", () => {
         <div class="employee-avatar-container">
           <div class="employee-avatar">
             <img src="${
-              employee.avatar || "/default-avatar.png"
+              employee.avatar || "/avatars/default-avatar.png"
             }" alt="Avatar" />
           </div>
           <label class="avatar-upload">
@@ -244,34 +262,37 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // New Employee Button
   newEmployeeBtn.addEventListener("click", () => {
-    // Mock modal for adding new employee
     const modal = document.createElement("div");
     modal.classList.add("modal");
     modal.innerHTML = `
-      <div class="modal-content">
-        <button class="close-modal">&times;</button>
-        <h2>Thêm nhân viên mới</h2>
-        <form id="newEmployeeForm">
-          <div class="form-group">
-            <label for="newName">Tên</label>
-            <input type="text" id="newName" required />
-          </div>
-          <div class="form-group">
-            <label for="newEmployeeId">Mã nhân viên</label>
-            <input type="text" id="newEmployeeId" required />
-          </div>
-          <div class="form-group">
-            <label for="newRole">Chức vụ</label>
-            <input type="text" id="newRole" required />
-          </div>
-          <div class="form-group">
-            <label for="newDepartment">Phòng ban</label>
-            <input type="text" id="newDepartment" required />
-          </div>
-          <button type="submit" class="submit-btn">Thêm</button>
-        </form>
-      </div>
-    `;
+    <div class="modal-content">
+      <button class="close-modal">×</button>
+      <h2>Thêm nhân viên mới</h2>
+      <form id="newEmployeeForm">
+        <div class="form-group">
+          <label for="newLastName">Họ</label>
+          <input type="text" id="newLastName" required />
+        </div>
+        <div class="form-group">
+          <label for="newFirstName">Tên</label>
+          <input type="text" id="newFirstName" required />
+        </div>
+        <div class="form-group">
+          <label for="newEmployeeId">Mã nhân viên</label>
+          <input type="text" id="newEmployeeId" required />
+        </div>
+        <div class="form-group">
+          <label for="newRole">Chức vụ</label>
+          <input type="text" id="newRole" required />
+        </div>
+        <div class="form-group">
+          <label for="newDepartment">Phòng ban</label>
+          <input type="text" id="newDepartment" required />
+        </div>
+        <button type="submit" class="submit-btn">Thêm</button>
+      </form>
+    </div>
+  `;
     document.body.appendChild(modal);
 
     const closeModal = modal.querySelector(".close-modal");
@@ -282,7 +303,8 @@ document.addEventListener("DOMContentLoaded", () => {
       .addEventListener("submit", async (e) => {
         e.preventDefault();
         const newEmployee = {
-          name: document.getElementById("newName").value,
+          lastName: document.getElementById("newLastName").value,
+          firstName: document.getElementById("newFirstName").value,
           employeeId: document.getElementById("newEmployeeId").value,
           role: document.getElementById("newRole").value,
           department: document.getElementById("newDepartment").value,

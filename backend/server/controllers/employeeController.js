@@ -96,6 +96,14 @@ export const addEmployee = async (req, res) => {
   const ngayThamGia = new Date().toISOString().slice(0, 19).replace("T", " ");
   const password = generateRandomPassword();
 
+  // Kiểm tra các trường bắt buộc
+  if (!lastName || !firstName || !department || !chucVu) {
+    return res.status(400).json({
+      message:
+        "Thiếu thông tin bắt buộc: lastName, firstName, department, chucVu",
+    });
+  }
+
   const capBac = chucVu === "Trưởng phòng" ? "A1" : "B1";
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
@@ -122,19 +130,19 @@ export const addEmployee = async (req, res) => {
     empId,
     lastName,
     firstName,
-    email,
-    birthdate,
-    telephone,
-    gender,
+    email || null,
+    birthdate || null,
+    telephone || null,
+    gender || null,
     department,
     chucVu,
     capBac,
     null,
     chuKiLuong,
-    luongCoBan,
+    luongCoBan || null,
     ngayThamGia,
     status,
-    address_loc,
+    address_loc || null,
   ]);
 
   await req.db.query(userQuery, [
