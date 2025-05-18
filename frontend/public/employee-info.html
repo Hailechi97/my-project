@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thông Tin Nhân Viên</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="../src/assets/styles/employee-info.css" />
+  </head>
+  <body>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <button class="toggle-btn" id="toggleBtn">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+      <ul class="sidebar-menu">
+        <li class="sidebar-item">
+          <a href="/forum">
+            <i class="fas fa-home"></i>
+            <span>Trang chủ</span>
+          </a>
+        </li>
+        <li class="sidebar-item active">
+          <a href="/employee-info">
+            <i class="fas fa-list"></i>
+            <span>Thông tin phòng ban</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="/submitted-requests">
+            <i class="fas fa-file-alt"></i>
+            <span>Đơn & phiếu</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="/schedule">
+            <i class="fas fa-calendar-alt"></i>
+            <span>Lịch họp</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="/exam-schedule">
+            <i class="fas fa-calendar-check"></i>
+            <span>Thông báo</span>
+          </a>
+        </li>
+        <li class="sidebar-item"></li>
+        <li class="sidebar-item"></li>
+        <li class="sidebar-item"></li>
+        <li
+          class="sidebar-item"
+          id="deleteRequestsMenu"
+          style="display: none"
+        ></li>
+      </ul>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+      <div class="logo">
+        <i class="fas fa-users"></i>
+        <span>THÔNG TIN NHÂN VIÊN</span>
+      </div>
+      <div class="user-menu">
+        <!-- Notification Bell -->
+        <div class="notification-menu">
+          <i class="fas fa-bell notification-bell" id="notificationBell"></i>
+          <span id="notificationCount" class="notification-count">0</span>
+          <div class="dropdown-menu" id="notificationDropdown">
+            <div style="padding: 10px; border-bottom: 1px solid #eee">
+              <strong>Thông báo</strong>
+            </div>
+            <div id="notificationList" class="notification-list">
+              <!-- Notifications will be added here -->
+            </div>
+            <a
+              href="/submitted-requests"
+              class="dropdown-item"
+              style="text-align: center; border-top: 1px solid #eee"
+            >
+              Xem tất cả thông báo
+            </a>
+          </div>
+        </div>
+        <!-- User Info -->
+        <div class="user-info" id="userInfo">
+          <div class="user-avatar" id="userAvatar">
+            <img id="userAvatarImg" src="" alt="Avatar" />
+          </div>
+          <span class="user-name" id="userName"></span>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="dropdown-menu" id="dropdownMenu">
+          <a href="/employee-info/" class="dropdown-item" id="employeeInfoLink">
+            <i class="fas fa-user"></i> Thông tin nhân viên
+          </a>
+          <a href="#" class="dropdown-item" id="logoutBtn">
+            <i class="fas fa-sign-out-alt"></i> Đăng xuất
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+      <div class="page-header">
+        <h1 class="page-title" id="pageTitle">Thông tin cá nhân</h1>
+      </div>
+      <div id="employeesListContainer" class="employees-list-container">
+        <div class="filters">
+          <div class="filter-group">
+            <label for="searchInput">Tìm kiếm:</label>
+            <input
+              type="text"
+              id="searchInput"
+              class="filter-control"
+              placeholder="Tìm theo tên, email..."
+            />
+          </div>
+          <div class="filter-group">
+            <label for="startDateFilter">Từ ngày:</label>
+            <input type="date" id="startDateFilter" class="filter-control" />
+          </div>
+          <div class="filter-group">
+            <label for="endDateFilter">Đến ngày:</label>
+            <input type="date" id="endDateFilter" class="filter-control" />
+          </div>
+          <div class="filter-group">
+            <label for="sortFilter">Sắp xếp:</label>
+            <select id="sortFilter" class="filter-control">
+              <option value="newest">Mới nhất</option>
+              <option value="oldest">Cũ nhất</option>
+            </select>
+          </div>
+        </div>
+        <div class="employees-header">
+          <div class="employees-header-left">
+            <div class="tabs">
+              <div class="tab active" data-tab="all-employees">
+                Tất cả nhân viên
+              </div>
+              <div class="tab" data-tab="teams">Nhóm</div>
+              <div class="tab" data-tab="roles">Vai trò</div>
+            </div>
+          </div>
+          <div class="employees-header-right">
+            <button class="export-btn" id="exportBtn">
+              <i class="fas fa-download"></i> Xuất dữ liệu
+            </button>
+            <button class="new-employee-btn" id="newEmployeeBtn">
+              <i class="fas fa-plus"></i> Thêm nhân viên
+            </button>
+          </div>
+        </div>
+        <table class="employees-table" id="employeesTable">
+          <thead>
+            <tr>
+              <th><input type="checkbox" id="selectAll" /></th>
+              <th>Tên</th>
+              <th>Mã nhân viên</th>
+              <th>Chức vụ</th>
+              <th>Trạng thái</th>
+              <th>Phòng ban</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="employeesTableBody">
+            <!-- Danh sách nhân viên sẽ được thêm bằng JavaScript -->
+          </tbody>
+        </table>
+      </div>
+      <div
+        id="employeeDetailContainer"
+        class="employee-container"
+        style="display: none"
+      >
+        <!-- Nội dung chi tiết nhân viên sẽ được thêm bằng JavaScript -->
+      </div>
+    </div>
+
+    <!-- Context Menu -->
+    <div id="contextMenu" class="context-menu">
+      <div class="context-menu-item" data-action="view">Xem chi tiết</div>
+      <div class="context-menu-item" data-action="delete">Xóa</div>
+    </div>
+
+    <script type="module" src="../src/components/sidebar.js"></script>
+    <script type="module" src="../src/components/navbar.js"></script>
+    <script type="module" src="../src/pages/employee-info.js"></script>
+  </body>
+</html>

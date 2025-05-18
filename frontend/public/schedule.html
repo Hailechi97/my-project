@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LỊCH HỌP</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="/src/assets/styles/schedule.css" />
+  </head>
+  <body>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <button class="toggle-btn" id="toggleBtn">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+      <ul class="sidebar-menu">
+        <li class="sidebar-item">
+          <a href="/forum">
+            <i class="fas fa-home"></i>
+            <span>Trang chủ</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="/employee-info">
+            <i class="fas fa-list"></i>
+            <span>Thông tin phòng ban</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="/submitted-requests">
+            <i class="fas fa-file-alt"></i>
+            <span>Đơn & phiếu</span>
+          </a>
+        </li>
+        <li class="sidebar-item active">
+          <a href="/schedule">
+            <i class="fas fa-calendar-alt"></i>
+            <span>Lịch họp</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="/exam-schedule">
+            <i class="fas fa-calendar-check"></i>
+            <span>Thông báo</span>
+          </a>
+        </li>
+        <li class="sidebar-item"></li>
+        <li class="sidebar-item"></li>
+        <li class="sidebar-item"></li>
+        <li
+          class="sidebar-item"
+          id="deleteRequestsMenu"
+          style="display: none"
+        ></li>
+      </ul>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+      <div class="logo">
+        <i class="fas fa-calendar-alt"></i>
+        <span>LỊCH HỌP</span>
+      </div>
+      <div class="user-menu">
+        <!-- Notification Bell -->
+        <div class="notification-menu">
+          <i class="fas fa-bell notification-bell" id="notificationBell"></i>
+          <span id="notificationCount" class="notification-count">0</span>
+          <div class="dropdown-menu" id="notificationDropdown">
+            <div style="padding: 10px; border-bottom: 1px solid #eee">
+              <strong>Thông báo</strong>
+            </div>
+            <div id="notificationList" class="notification-list">
+              <!-- Notifications will be added here -->
+            </div>
+            <a
+              href="/submitted-requests"
+              class="dropdown-item"
+              style="text-align: center; border-top: 1px solid #eee"
+            >
+              Xem tất cả thông báo
+            </a>
+          </div>
+        </div>
+        <!-- User Info -->
+        <div class="user-info" id="userInfo">
+          <div class="user-avatar" id="userAvatar">
+            <img
+              id="userAvatarImg"
+              src="/Uploads/default-avatar.png"
+              alt="Avatar"
+            />
+          </div>
+          <span class="user-name" id="userName"></span>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="dropdown-menu" id="dropdownMenu">
+          <a href="/employee-info/" class="dropdown-item" id="employeeInfoLink">
+            <i class="fas fa-user"></i> Thông tin nhân viên
+          </a>
+          <a href="#" class="dropdown-item" id="logoutBtn">
+            <i class="fas fa-sign-out-alt"></i> Đăng xuất
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Content -->
+    <div class="content" id="content">
+      <div class="schedule-container">
+        <h2><i class="fas fa-calendar-alt"></i> Quản lý lịch họp</h2>
+        <div
+          class="week-navigation"
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+          "
+        >
+          <button
+            id="prevWeekBtn"
+            style="
+              padding: 10px 20px;
+              background-color: var(--primary);
+              color: white;
+              border: none;
+              border-radius: 5px;
+              cursor: pointer;
+            "
+          >
+            Tuần trước
+          </button>
+          <h3 id="weekTitle">Tuần hiện tại</h3>
+          <button
+            id="nextWeekBtn"
+            style="
+              padding: 10px 20px;
+              background-color: var(--primary);
+              color: white;
+              border: none;
+              border-radius: 5px;
+              cursor: pointer;
+            "
+          >
+            Tuần tới
+          </button>
+        </div>
+        <div class="schedule-table-container">
+          <table class="schedule-table" id="scheduleTable">
+            <thead>
+              <tr>
+                <th>Thứ 2</th>
+                <th>Thứ 3</th>
+                <th>Thứ 4</th>
+                <th>Thứ 5</th>
+                <th>Thứ 6</th>
+                <th>Thứ 7</th>
+                <th>Chủ nhật</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Lịch họp sẽ được thêm bằng JavaScript -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Form tạo lịch họp (chỉ hiển thị cho Manager) -->
+        <div class="new-meeting-form" id="newMeetingForm" style="display: none">
+          <h3>Tạo lịch họp mới</h3>
+          <form id="createMeetingForm">
+            <div class="form-group">
+              <label for="meetingTitle">Tiêu đề cuộc họp</label>
+              <input
+                type="text"
+                id="meetingTitle"
+                name="meetingTitle"
+                placeholder="Nhập tiêu đề cuộc họp"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="meetingDay">Ngày họp</label>
+              <select id="meetingDay" name="meetingDay" required>
+                <option value="2">Thứ 2</option>
+                <option value="3">Thứ 3</option>
+                <option value="4">Thứ 4</option>
+                <option value="5">Thứ 5</option>
+                <option value="6">Thứ 6</option>
+                <option value="7">Thứ 7</option>
+                <option value="1">Chủ nhật</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="meetingTime">Thời gian họp</label>
+              <input
+                type="datetime-local"
+                id="meetingTime"
+                name="meetingTime"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="meetingContent">Nội dung</label>
+              <textarea
+                id="meetingContent"
+                name="meetingContent"
+                rows="3"
+                placeholder="Nhập nội dung cuộc họp"
+                required
+              ></textarea>
+            </div>
+            <div class="form-group">
+              <label for="meetingRoom">Phòng họp</label>
+              <input
+                type="text"
+                id="meetingRoom"
+                name="meetingRoom"
+                placeholder="Nhập phòng họp (VD: E1-12.001)"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <button type="submit">Tạo lịch họp</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Menu ngữ cảnh -->
+    <div id="contextMenu" class="context-menu">
+      <div class="context-menu-item" id="editMeeting">Chỉnh sửa</div>
+      <div class="context-menu-item" id="deleteMeeting">Xóa</div>
+    </div>
+
+    <!-- Modal chỉnh sửa lịch họp -->
+    <div id="editMeetingModal" class="modal">
+      <div class="modal-content">
+        <h3>Chỉnh sửa lịch họp</h3>
+        <form id="editMeetingForm">
+          <div class="form-group">
+            <label for="editMeetingTitle">Tiêu đề cuộc họp</label>
+            <input
+              type="text"
+              id="editMeetingTitle"
+              name="editMeetingTitle"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="editMeetingDay">Ngày họp</label>
+            <select id="editMeetingDay" name="editMeetingDay" required>
+              <option value="2">Thứ 2</option>
+              <option value="3">Thứ 3</option>
+              <option value="4">Thứ 4</option>
+              <option value="5">Thứ 5</option>
+              <option value="6">Thứ 6</option>
+              <option value="7">Thứ 7</option>
+              <option value="1">Chủ nhật</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="editMeetingTime">Thời gian họp</label>
+            <input
+              type="datetime-local"
+              id="editMeetingTime"
+              name="editMeetingTime"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <label for="editMeetingContent">Nội dung</label>
+            <textarea
+              id="editMeetingContent"
+              name="editMeetingContent"
+              rows="3"
+              required
+            ></textarea>
+          </div>
+          <div class="form-group">
+            <label for="editMeetingRoom">Phòng họp</label>
+            <input
+              type="text"
+              id="editMeetingRoom"
+              name="editMeetingRoom"
+              required
+            />
+          </div>
+          <div class="form-group">
+            <button type="submit">Lưu</button>
+            <button type="button" class="cancel" id="cancelEdit">Hủy</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="/src/components/sidebar.js"></script>
+    <script src="/src/components/navbar.js"></script>
+    <script src="/src/pages/schedule.js"></script>
+  </body>
+</html>

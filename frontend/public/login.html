@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Đăng nhập | Forum Nội Bộ</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="../src/assets/styles/login.css" />
+  </head>
+  <body>
+    <div class="login-container">
+      <!-- Phần thông tin hướng dẫn -->
+      <div class="login-info">
+        <div>
+          <h1>HỆ THỐNG FORUM CÔNG TY</h1>
+          <h2>PHÒNG BAN CNTT</h2>
+          <h3>HƯỚNG DẪN TRUY CẬP HỆ THỐNG</h3>
+          <p>
+            Nhân viên vui lòng sử dụng chức năng "<strong>ĐĂNG NHẬP</strong>" để
+            tiếp tục, tài khoản cá nhân được cung cấp trước đó qua email.
+          </p>
+          <p>
+            <strong>Trường hợp tài khoản chính thức:</strong> Email của nhân
+            viên.
+          </p>
+          <p>
+            <strong>Mật khẩu mặc định:</strong> Được cung cấp bởi công ty khi
+            bạn được nhận vào làm việc ở ngày đầu tiên (sau khi đăng nhập lần
+            đầu phải thay đổi mật khẩu).
+          </p>
+          <p>
+            Ví dụ, nhân viên có email là
+            <strong>nhanvien@example.com</strong> thì tài khoản là:
+            <strong>nhanvien@example.com</strong>. Nếu không đăng nhập được hoặc
+            lỗi hồ sơ thông tin, lỗi kỹ thuật, vui lòng liên hệ số điện thoại:
+          </p>
+        </div>
+        <div class="contact"><i class="fas fa-phone-alt"></i> 0335541135</div>
+      </div>
+
+      <!-- Phần form đăng nhập -->
+      <div class="login-form">
+        <h3>ĐĂNG NHẬP HỆ THỐNG</h3>
+        <div
+          id="errorMessage"
+          class="alert alert-danger"
+          style="display: none"
+        ></div>
+
+        <form id="loginForm">
+          <div class="form-group">
+            <label for="email">Email</label>
+            <div style="position: relative">
+              <input
+                type="email"
+                id="email"
+                class="form-control"
+                placeholder="Nhập email của bạn"
+                required
+              />
+              <i class="fas fa-user input-icon"></i>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="password">Mật khẩu</label>
+            <div style="position: relative">
+              <input
+                type="password"
+                id="password"
+                class="form-control"
+                placeholder="Nhập mật khẩu"
+                required
+              />
+              <i class="fas fa-lock input-icon"></i>
+            </div>
+          </div>
+
+          <div class="forgot-password">
+            <a href="#" id="forgotPasswordLink">Quên mật khẩu?</a>
+          </div>
+
+          <button type="submit" class="btn">
+            <i class="fas fa-sign-in-alt"></i> ĐĂNG NHẬP
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal quên mật khẩu -->
+    <div class="modal" id="forgotPasswordModal">
+      <div class="modal-content">
+        <span class="close-btn" id="closeModal">×</span>
+        <div class="modal-header">
+          <h2>Khôi phục mật khẩu</h2>
+        </div>
+        <form id="forgotPasswordForm">
+          <div class="form-group">
+            <label for="resetEmail">Email</label>
+            <div style="position: relative">
+              <input
+                type="email"
+                id="resetEmail"
+                class="form-control"
+                placeholder="Nhập email của bạn"
+                required
+              />
+              <i class="fas fa-envelope input-icon"></i>
+            </div>
+          </div>
+          <div id="resetMessage" class="alert" style="display: none"></div>
+          <button type="submit" class="btn">
+            <i class="fas fa-paper-plane"></i> Gửi yêu cầu
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <script src="../src/pages/login.js"></script>
+  </body>
+</html>

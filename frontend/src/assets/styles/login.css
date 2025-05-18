@@ -1,0 +1,277 @@
+:root {
+  --primary: #4e73df;
+  --secondary: #2e59d9;
+  --light: #f8f9fc;
+  --dark: #5a5c69;
+  --success: #1cc88a;
+  --danger: #e74a3b;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url("anhbackgourd.jpg");
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+body::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(8px);
+  z-index: 1;
+}
+
+.login-container {
+  width: 100%;
+  max-width: 900px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+  display: flex;
+  overflow: hidden;
+  animation: fadeIn 0.5s ease;
+  position: relative;
+  z-index: 2;
+}
+
+.login-info {
+  flex: 1.5;
+  padding: 3rem;
+  background: #f9f9f9;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.login-info h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--dark);
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.login-info h2 {
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: var(--dark);
+  margin-bottom: 1rem;
+}
+
+.login-info p {
+  font-size: 1rem;
+  color: var(--dark);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.login-info a {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.login-info a:hover {
+  text-decoration: underline;
+}
+
+.login-info .contact {
+  font-size: 1rem;
+  color: var(--dark);
+  margin-top: 1rem;
+}
+
+.login-form {
+  flex: 1;
+  padding: 2rem;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.login-form h3 {
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: var(--dark);
+  margin-bottom: 1.5rem;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+  position: relative;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--dark);
+  font-weight: 500;
+}
+
+.form-control {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #d1d3e2;
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: all 0.3s;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+}
+
+.btn {
+  display: inline-block;
+  padding: 12px 20px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+  width: 100%;
+}
+
+.btn:hover {
+  background: var(--secondary);
+  transform: translateY(-2px);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.alert {
+  padding: 12px;
+  margin-bottom: 1rem;
+  border-radius: 5px;
+  font-size: 0.9rem;
+}
+
+.alert-danger {
+  background: #f8d7da;
+  color: var(--danger);
+  border: 1px solid #f5c6cb;
+}
+
+.alert-success {
+  background: #d4edda;
+  color: var(--success);
+  border: 1px solid #c3e6cb;
+}
+
+.input-icon {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #d1d3e2;
+}
+
+.forgot-password {
+  text-align: right;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.forgot-password a {
+  color: var(--primary);
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.forgot-password a:hover {
+  text-decoration: underline;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 400px;
+  position: relative;
+  animation: fadeIn 0.3s ease;
+}
+
+.close-btn {
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--dark);
+}
+
+.modal-header {
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.modal-header h2 {
+  font-size: 1.5rem;
+  color: var(--dark);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .login-container {
+    flex-direction: column;
+    max-width: 400px;
+  }
+
+  .login-info {
+    padding: 2rem;
+  }
+
+  .login-form {
+    padding: 1.5rem;
+  }
+}

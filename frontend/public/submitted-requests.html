@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản lý Đơn | Hệ Thống Nội Bộ</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="/src/assets/styles/submitted-requests.css" />
+  </head>
+  <body>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <button class="toggle-btn" id="toggleBtn">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+      <ul class="sidebar-menu">
+        <li class="sidebar-item">
+          <a href="/forum">
+            <i class="fas fa-home"></i>
+            <span>Trang chủ</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="/employee-info">
+            <i class="fas fa-list"></i>
+            <span>Thông tin phòng ban</span>
+          </a>
+        </li>
+        <li class="sidebar-item active">
+          <a href="/submitted-requests">
+            <i class="fas fa-file-alt"></i>
+            <span>Đơn & phiếu</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="/schedule">
+            <i class="fas fa-calendar-alt"></i>
+            <span>Lịch họp</span>
+          </a>
+        </li>
+        <li class="sidebar-item">
+          <a href="/exam-schedule">
+            <i class="fas fa-calendar-check"></i>
+            <span>Thông báo</span>
+          </a>
+        </li>
+        <li class="sidebar-item"></li>
+        <li class="sidebar-item"></li>
+        <li class="sidebar-item"></li>
+        <li
+          class="sidebar-item"
+          id="deleteRequestsMenu"
+          style="display: none"
+        ></li>
+      </ul>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+      <div class="logo">
+        <i class="fas fa-file-signature"></i>
+        <span>QUẢN LÝ ĐƠN & PHIẾU</span>
+      </div>
+      <div class="user-menu">
+        <!-- Notification Bell -->
+        <div class="notification-menu">
+          <i class="fas fa-bell notification-bell" id="notificationBell"></i>
+          <span id="notificationCount" class="notification-count">0</span>
+          <div class="dropdown-menu" id="notificationDropdown">
+            <div style="padding: 10px; border-bottom: 1px solid #eee">
+              <strong>Thông báo</strong>
+            </div>
+            <div id="notificationList" class="notification-list">
+              <!-- Notifications will be added here -->
+            </div>
+            <a
+              href="/submitted-requests"
+              class="dropdown-item"
+              style="text-align: center; border-top: 1px solid #eee"
+            >
+              Xem tất cả thông báo
+            </a>
+          </div>
+        </div>
+        <!-- User Info -->
+        <div class="user-info" id="userInfo">
+          <div class="user-avatar" id="userAvatar">
+            <img id="userAvatarImg" src="" alt="Avatar" />
+          </div>
+          <span class="user-name" id="userName"></span>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+        <div class="dropdown-menu" id="dropdownMenu">
+          <a href="/employee-info/" class="dropdown-item" id="employeeInfoLink">
+            <i class="fas fa-user"></i> Thông tin nhân viên
+          </a>
+          <a href="#" class="dropdown-item" id="logoutBtn">
+            <i class="fas fa-sign-out-alt"></i> Đăng xuất
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+      <div class="page-header">
+        <h1 class="page-title">Quản lý Đơn & Phiếu</h1>
+      </div>
+
+      <!-- Stats Section (Chỉ hiển thị cho manager) -->
+      <div class="stats-container" id="statsContainer" style="display: none">
+        <div class="stat-card pending">
+          <i class="fas fa-hourglass-half"></i>
+          <h3>Đơn cần duyệt</h3>
+          <p id="pendingCount">0</p>
+        </div>
+        <div class="stat-card approved">
+          <i class="fas fa-check-circle"></i>
+          <h3>Đơn đã duyệt</h3>
+          <p id="approvedCount">0</p>
+        </div>
+        <div class="stat-card rejected">
+          <i class="fas fa-times-circle"></i>
+          <h3>Đơn từ chối</h3>
+          <p id="rejectedCount">0</p>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="filters">
+        <div class="filter-group">
+          <label for="searchInput">Tìm kiếm:</label>
+          <input
+            type="text"
+            id="searchInput"
+            class="filter-control"
+            placeholder="Tìm theo tên, email..."
+          />
+        </div>
+        <div class="filter-group">
+          <label for="typeFilter">Loại đơn:</label>
+          <select id="typeFilter" class="filter-control">
+            <option value="">Tất cả</option>
+            <option value="Nghỉ phép">Nghỉ phép</option>
+            <option value="Công tác">Công tác</option>
+            <option value="Hỗ trợ">Hỗ trợ</option>
+            <option value="Tăng lương">Tăng lương</option>
+            <option value="Reset Password">Reset mật khẩu</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="statusFilter">Trạng thái:</label>
+          <select id="statusFilter" class="filter-control">
+            <option value="">Tất cả</option>
+            <option value="Chờ duyệt">Chờ duyệt</option>
+            <option value="Đã duyệt">Đã duyệt</option>
+            <option value="Từ chối">Từ chối</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="sortFilter">Sắp xếp:</label>
+          <select id="sortFilter" class="filter-control">
+            <option value="newest">Mới nhất</option>
+            <option value="oldest">Trễ nhất</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <div class="tab active" id="pendingTab">
+          Đơn cần duyệt (<span id="pendingTabCount">0</span>)
+        </div>
+        <div class="tab" id="approvedTab">
+          Đơn đã duyệt (<span id="approvedTabCount">0</span>)
+        </div>
+      </div>
+
+      <!-- Form tạo đơn mới -->
+      <div class="request-form" id="requestForm">
+        <h2><i class="fas fa-plus-circle"></i> Tạo đơn mới</h2>
+        <div id="newRequestForm">
+          <div class="form-group">
+            <label>Loại đơn</label>
+            <div class="request-type-select">
+              <input
+                type="radio"
+                id="request-type-1"
+                name="requestType"
+                value="Nghỉ phép"
+                class="request-type-option"
+                checked
+              />
+              <label for="request-type-1" class="request-type-label">
+                <i class="fas fa-bed"></i> Nghỉ phép
+              </label>
+              <input
+                type="radio"
+                id="request-type-2"
+                name="requestType"
+                value="Công tác"
+                class="request-type-option"
+              />
+              <label for="request-type-2" class="request-type-label">
+                <i class="fas fa-plane"></i> Công tác
+              </label>
+              <input
+                type="radio"
+                id="request-type-3"
+                name="requestType"
+                value="Hỗ trợ"
+                class="request-type-option"
+              />
+              <label for="request-type-3" class="request-type-label">
+                <i class="fas fa-hands-helping"></i> Hỗ trợ
+              </label>
+              <input
+                type="radio"
+                id="request-type-4"
+                name="requestType"
+                value="Tăng lương"
+                class="request-type-option"
+              />
+              <label for="request-type-4" class="request-type-label">
+                <i class="fas fa-money-bill-wave"></i> Tăng lương
+              </label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="requestContent">Nội dung</label>
+            <textarea
+              id="requestContent"
+              class="form-control"
+              placeholder="Mô tả chi tiết đơn/phiếu của bạn"
+              required
+            ></textarea>
+          </div>
+          <div class="form-group">
+            <label>File đính kèm (nếu có)</label>
+            <div class="file-upload">
+              <label for="requestAttachment" class="file-upload-label">
+                <i class="fas fa-paperclip"></i> Chọn file
+              </label>
+              <input type="file" id="requestAttachment" style="display: none" />
+              <span id="fileName" class="file-name"
+                >Chưa có file nào được chọn</span
+              >
+            </div>
+          </div>
+          <button type="submit" class="submit-btn">
+            <i class="fas fa-paper-plane"></i> Gửi đơn
+          </button>
+        </div>
+      </div>
+
+      <!-- Danh sách đơn cần duyệt và đã duyệt -->
+      <div class="requests-container">
+        <div id="pendingRequests">
+          <h2><i class="fas fa-list"></i> Đơn cần duyệt</h2>
+          <div class="requests-list" id="pendingRequestsList">
+            <div class="loading">
+              <i class="fas fa-spinner fa-spin"></i> Đang tải danh sách đơn...
+            </div>
+          </div>
+        </div>
+        <div id="approvedRequests" style="display: none">
+          <h2><i class="fas fa-check-circle"></i> Đơn đã duyệt</h2>
+          <div class="requests-list" id="approvedRequestsList">
+            <div class="loading">
+              <i class="fas fa-spinner fa-spin"></i> Đang tải danh sách đơn...
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Detail Popup -->
+    <div class="detail-popup" id="detailPopup" style="display: none">
+      <div class="detail-popup-content" id="detailPopupContent">
+        <!-- Nội dung chi tiết sẽ được thêm bằng JavaScript -->
+      </div>
+    </div>
+
+    <!-- Rejection Reason Popup -->
+    <div class="popup" id="rejectionPopup" style="display: none">
+      <div class="popup-content">
+        <h3>Nhập lý do từ chối</h3>
+        <textarea
+          id="rejectionReason"
+          placeholder="Vui lòng nhập lý do từ chối đơn này..."
+        ></textarea>
+        <div class="buttons">
+          <button class="cancel">Hủy</button>
+          <button class="confirm">Xác nhận</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="/src/components/sidebar.js"></script>
+    <script src="/src/components/navbar.js"></script>
+    <script src="/src/pages/submitted-requests.js"></script>
+  </body>
+</html>
